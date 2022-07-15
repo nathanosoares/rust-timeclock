@@ -23,12 +23,12 @@ impl WorkdayPersistence for FileWorkdayPersistence {
                 let write_result = writeln!(&file, "{}", workday.date().format("%Y-%m-%d"));
 
                 if let Err(error) = write_result {
-                    return Err(WorkdayRepositoryError::Persistence(Some(error)));
+                    return Err(WorkdayRepositoryError::Persistence(error));
                 }
 
                 return Ok(());
             }
-            Err(error) => Err(WorkdayRepositoryError::Persistence(Some(error))),
+            Err(error) => Err(WorkdayRepositoryError::Persistence(error)),
         }
     }
 
@@ -39,14 +39,14 @@ impl WorkdayPersistence for FileWorkdayPersistence {
         let file_result = File::open("ddb.txt");
 
         if let Err(error) = file_result {
-            return Err(WorkdayRepositoryError::Persistence(Some(error)));
+            return Err(WorkdayRepositoryError::Persistence(error));
         }
 
         let reader = BufReader::new(file_result.unwrap());
 
         for line_result in reader.lines() {
             if let Err(error) = line_result {
-                return Err(WorkdayRepositoryError::Persistence(Some(error)));
+                return Err(WorkdayRepositoryError::Persistence(error));
             }
 
             let date_line = NaiveDate::parse_from_str(&line_result.unwrap(), "%Y-%m-%d").unwrap();

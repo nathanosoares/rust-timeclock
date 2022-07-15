@@ -5,8 +5,8 @@ use crate::business::domain::Workday;
 
 #[derive(thiserror::Error, Debug)]
 pub enum WorkdayRepositoryError {
-    #[error("Persistence error {0:?}.")]
-    Persistence(Option<std::io::Error>),
+    #[error(transparent)]
+    Persistence(#[from] std::io::Error),
 
     #[error("Entity already exists.")]
     EntityAlreadyExists,
