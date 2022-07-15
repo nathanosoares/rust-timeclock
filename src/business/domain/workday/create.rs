@@ -1,6 +1,7 @@
-use chrono::{Date, Utc};
+use chrono::{Date, Utc, TimeZone};
 
 use super::entity::Workday;
+use super::session::Session;
 use super::repository::WorkdayRepository;
 
 pub struct CreateUseCase {
@@ -17,7 +18,11 @@ impl CreateUseCase {
     }
 
     pub fn execute(&self, dto: CreateDto) -> Result<Workday, Box<dyn std::error::Error>> {
-        let workday = Workday::new(dto.date);
+        let mut workday = Workday::new(dto.date);
+        workday.add_session(Session::new(
+            Utc.ymd(2022, 07, 01).and_hms(13, 30, 0),
+            Some(Utc.ymd(2022, 07, 01).and_hms(18, 00, 0)),
+        ))?;
 
         self.repository.create(&workday)?;
 
