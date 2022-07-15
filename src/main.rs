@@ -36,7 +36,7 @@ impl WorkdayPersistence for FileWorkdayPersistence {
         &self,
         date: chrono::Date<Utc>,
     ) -> anyhow::Result<Option<Workday>, WorkdayRepositoryError> {
-        let file_result = File::open("ddb.txt");
+        let file_result = File::open("db.txt");
 
         if let Err(error) = file_result {
             return Err(WorkdayRepositoryError::Persistence(error));
