@@ -3,15 +3,15 @@ use chrono::{Date, Utc};
 use crate::business::domain::Workday;
 
 
-#[derive(thiserror::Error, Debug, PartialEq)]
+#[derive(thiserror::Error, Debug)]
 pub enum WorkdayRepositoryError {
-    #[error("An open session already exists.")]
-    Persistence,
+    #[error("Persistence error {0:?}.")]
+    Persistence(Option<std::io::Error>),
 
-    #[error("An open session already exists.")]
+    #[error("Entity already exists.")]
     EntityAlreadyExists,
 
-    #[error("An open session already exists.")]
+    #[error("Entity not found.")]
     EntityNotFound,
 }
 

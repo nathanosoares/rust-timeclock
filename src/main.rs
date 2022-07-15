@@ -22,22 +22,34 @@ impl WorkdayPersistence for FileWorkdayPersistence {
             Ok(file) => {
                 let write_result = writeln!(&file, "{}", workday.date().format("%Y-%m-%d"));
 
-                if write_result.is_ok() {
-                    return Ok(());
+                if let Err(error) = write_result {
+                    return Err(WorkdayRepositoryError::Persistence(Some(error)));
                 }
 
-                return Err(WorkdayRepositoryError::Persistence);
+                return Ok(());
             }
-            Err(_) => Err(WorkdayRepositoryError::Persistence),
+            Err(error) => Err(WorkdayRepositoryError::Persistence(Some(error))),
         }
     }
 
-    fn find_by_day(&self, date: chrono::Date<Utc>) -> anyhow::Result<Option<Workday>, WorkdayRepositoryError> {
-        let file = File::open("db.txt").unwrap();
-        let reader = BufReader::new(file);
+    fn find_by_day(
+        &self,
+        date: chrono::Date<Utc>,
+    ) -> anyhow::Result<Option<Workday>, WorkdayRepositoryError> {
+        let file_result = File::open("ddb.txt");
 
-        for line in reader.lines() {
-            let date_line = NaiveDate::parse_from_str(&line.unwrap(), "%Y-%m-%d").unwrap();
+        if let Err(error) = file_result {
+            return Err(WorkdayRepositoryError::Persistence(Some(error)));
+        }
+
+        let reader = BufReader::new(file_result.unwrap());
+
+        for line_result in reader.lines() {
+            if let Err(error) = line_result {
+                return Err(WorkdayRepositoryError::Persistence(Some(error)));
+            }
+
+            let date_line = NaiveDate::parse_from_str(&line_result.unwrap(), "%Y-%m-%d").unwrap();
             let date_line = Date::from_utc(date_line, Utc);
 
             if date_line.eq(&date) {
