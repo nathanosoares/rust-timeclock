@@ -12,7 +12,7 @@ pub enum WorkdayError {
     #[error("Sessions is empty.")]
     EmptySessions,
 
-    #[error("The current sessions already ended.")]
+    #[error("The current session already ended.")]
     CurrentSessionAlreadyEnded,
 }
 
