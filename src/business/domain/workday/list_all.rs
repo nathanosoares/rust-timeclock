@@ -1,4 +1,4 @@
-use std::sync::{Mutex, Arc};
+use std::sync::{Arc, Mutex};
 
 use super::dto::WorkdayDto;
 use super::repository::WorkdayRepository;
@@ -9,7 +9,9 @@ pub struct ListAllUseCase<'a> {
 
 impl<'a> ListAllUseCase<'a> {
     pub fn new(repository: &'a Mutex<WorkdayRepository>) -> Self {
-        Self { repository: Arc::new(repository) }
+        Self {
+            repository: Arc::new(repository),
+        }
     }
 
     pub fn execute(&mut self) -> Result<Box<[WorkdayDto]>, Box<dyn std::error::Error>> {
@@ -18,7 +20,12 @@ impl<'a> ListAllUseCase<'a> {
         let result = guard.find_all();
 
         if let Ok(all) = result {
-            return Ok(all.into_iter().map(|_workday| WorkdayDto {}).collect());
+            return Ok(all
+                .into_iter()
+                .map(|workday| WorkdayDto {
+                    date: workday.date(),
+                })
+                .collect());
         }
 
         Err(Box::new(result.err().unwrap()))

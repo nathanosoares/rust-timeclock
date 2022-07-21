@@ -23,7 +23,9 @@ impl<'a> CreateUseCase<'a> {
             Some(Utc.ymd(2022, 07, 01).and_hms(18, 00, 0)),
         ))?;
 
-        let dto = WorkdayDto {};
+        let dto = WorkdayDto {
+            date: workday.date()
+        };
 
         let mut guard = self.repository.lock().unwrap();
 
