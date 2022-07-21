@@ -12,7 +12,7 @@ fn main() {
     });
 
     let mut create_use_case = CreateUseCase::new(&repository);
-    let list_all_use_case = ListAllUseCase::new(&repository);
+    let mut list_all_use_case = ListAllUseCase::new(&repository);
 
     create_use_case
         .execute(CreateDto {
