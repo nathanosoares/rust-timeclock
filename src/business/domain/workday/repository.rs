@@ -16,9 +16,9 @@ pub enum WorkdayRepositoryError {
 }
 
 pub trait WorkdayPersistence {
-    fn insert(&self, workday: &Workday) -> anyhow::Result<(), WorkdayRepositoryError>;
+    fn insert(&mut self, workday: Workday) -> anyhow::Result<(), WorkdayRepositoryError>;
 
-    fn find_by_day(&self, date: Date<Utc>) -> anyhow::Result<Option<Workday>, WorkdayRepositoryError>;
+    fn find_by_day(&self, date: Date<Utc>) -> anyhow::Result<Option<&Workday>, WorkdayRepositoryError>;
 }
 
 pub struct WorkdayRepository {
@@ -26,7 +26,7 @@ pub struct WorkdayRepository {
 }
 
 impl WorkdayRepository {
-    pub fn create(&self, workday: &Workday) -> anyhow::Result<(), WorkdayRepositoryError> {
+    pub fn create(&mut self, workday: Workday) -> anyhow::Result<(), WorkdayRepositoryError> {
         if let Some(_) = self.persistence.find_by_day(workday.date())? {
             return Err(WorkdayRepositoryError::EntityAlreadyExists);
         }
