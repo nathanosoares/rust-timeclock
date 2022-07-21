@@ -1,21 +1,32 @@
-use business::domain::{CreateDto, CreateUseCase, WorkdayRepository};
-use chrono::Utc;
+use business::domain::{CreateDto, CreateUseCase, ListAllUseCase, WorkdayRepository};
+use chrono::prelude::*;
 use infrastructure::persistence::InMemoryWorkdayPersistence;
+use std::sync::Mutex;
 
 pub mod business;
 pub mod infrastructure;
 
 fn main() {
-    let repository = &mut WorkdayRepository {
+    let repository = Mutex::new(WorkdayRepository {
         persistence: Box::from(InMemoryWorkdayPersistence::new()),
-    };
+    });
 
-    let use_case = &mut CreateUseCase::new(repository);
+    let mut create_use_case = CreateUseCase::new(&repository);
+    let list_all_use_case = ListAllUseCase::new(&repository);
 
-    let result = use_case.execute(CreateDto { date: Utc::today() });
+    create_use_case
+        .execute(CreateDto {
+            date: Utc.ymd(2014, 7, 1),
+        })
+        .unwrap();
 
-    match result {
-        Ok(workday) => println!("Workday created {:?}", workday),
-        Err(error) => println!("Error: {}", error),
-    }
+    println!("{:?}", list_all_use_case.execute());
+
+    create_use_case
+        .execute(CreateDto {
+            date: Utc.ymd(2014, 7, 2),
+        })
+        .unwrap();
+
+    println!("{:?}", list_all_use_case.execute());
 }

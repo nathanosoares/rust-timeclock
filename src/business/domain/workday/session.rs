@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use std::cmp::Ordering;
 
-#[derive(Clone, PartialEq, Debug, Eq, PartialOrd)]
+#[derive(Copy, Clone, PartialEq, Debug, Eq, PartialOrd)]
 pub struct Session {
     started_at: DateTime<Utc>,
     ended_at: Option<DateTime<Utc>>,

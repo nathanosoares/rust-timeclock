@@ -1,4 +1,5 @@
 use crate::business::domain::{Workday, WorkdayPersistence, WorkdayRepositoryError};
+
 pub struct InMemoryWorkdayPersistence {
     workdays: Vec<Workday>,
 }
@@ -24,5 +25,11 @@ impl WorkdayPersistence for InMemoryWorkdayPersistence {
         let found = self.workdays.iter().find(|item| item.date().eq(&date));
 
         Ok(found)
+    }
+
+    fn find_all(&self) -> anyhow::Result<Vec<Workday>, WorkdayRepositoryError> {
+        let output: Vec<Workday> = self.workdays.into_iter().collect();
+
+        Ok(output)
     }
 }

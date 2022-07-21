@@ -16,7 +16,7 @@ pub enum WorkdayError {
     CurrentSessionAlreadyEnded,
 }
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Workday {
     date: Date<Utc>,
     sessions: Vec<Session>,

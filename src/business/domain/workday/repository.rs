@@ -2,7 +2,6 @@ use chrono::{Date, Utc};
 
 use crate::business::domain::Workday;
 
-
 #[derive(thiserror::Error, Debug)]
 pub enum WorkdayRepositoryError {
     #[error(transparent)]
@@ -18,7 +17,12 @@ pub enum WorkdayRepositoryError {
 pub trait WorkdayPersistence {
     fn insert(&mut self, workday: Workday) -> anyhow::Result<(), WorkdayRepositoryError>;
 
-    fn find_by_day(&self, date: Date<Utc>) -> anyhow::Result<Option<&Workday>, WorkdayRepositoryError>;
+    fn find_by_day(
+        &self,
+        date: Date<Utc>,
+    ) -> anyhow::Result<Option<&Workday>, WorkdayRepositoryError>;
+
+    fn find_all(&self) -> anyhow::Result<Vec<Workday>, WorkdayRepositoryError>;
 }
 
 pub struct WorkdayRepository {
@@ -34,5 +38,9 @@ impl WorkdayRepository {
         self.persistence.insert(workday)?;
 
         Ok(())
+    }
+
+    pub fn find_all(&self) -> anyhow::Result<Vec<Workday>, WorkdayRepositoryError> {
+        self.persistence.find_all()
     }
 }
