@@ -11,8 +11,9 @@ fn main() {
         persistence: Box::from(InMemoryWorkdayPersistence::new()),
     });
 
-    let mut create_use_case = CreateUseCase::new(Arc::new(repository));
-    let mut list_all_use_case = ListAllUseCase::new(Arc::new(repository));
+    let arc = Arc::new(repository);
+    let mut create_use_case = CreateUseCase::new(arc.clone());
+    let mut list_all_use_case = ListAllUseCase::new(arc.clone());
 
     create_use_case
         .execute(CreateDto {
