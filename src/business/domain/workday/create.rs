@@ -7,12 +7,12 @@ use super::entity::Workday;
 use super::repository::WorkdayRepository;
 use super::session::Session;
 
-pub struct CreateUseCase {
-    repository: Arc<Mutex<WorkdayRepository>>,
+pub struct CreateUseCase<'a> {
+    repository: Arc<&'a Mutex<WorkdayRepository>>,
 }
 
-impl CreateUseCase {
-    pub fn new(repository: &Mutex<WorkdayRepository>) -> Self {
+impl<'a> CreateUseCase<'a> {
+    pub fn new(repository: &'a Mutex<WorkdayRepository>) -> Self {
         Self { repository: Arc::new(repository) }
     }
 
