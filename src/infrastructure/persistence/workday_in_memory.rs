@@ -28,8 +28,6 @@ impl WorkdayPersistence for InMemoryWorkdayPersistence {
     }
 
     fn find_all(&self) -> anyhow::Result<Vec<Workday>, WorkdayRepositoryError> {
-        let output: Vec<Workday> = self.workdays.into_iter().collect();
-
-        Ok(output)
+        Ok(self.workdays.to_owned())
     }
 }
