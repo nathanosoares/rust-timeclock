@@ -3,15 +3,13 @@ use std::sync::{Arc, Mutex};
 use super::dto::WorkdayDto;
 use super::repository::WorkdayRepository;
 
-pub struct ListAllUseCase<'a> {
-    repository: Arc<&'a Mutex<WorkdayRepository>>,
+pub struct ListAllUseCase {
+    repository: Arc<Mutex<WorkdayRepository>>,
 }
 
-impl<'a> ListAllUseCase<'a> {
-    pub fn new(repository: &'a Mutex<WorkdayRepository>) -> Self {
-        Self {
-            repository: Arc::new(repository),
-        }
+impl ListAllUseCase {
+    pub fn new(repository: Arc<Mutex<WorkdayRepository>>) -> Self {
+        Self { repository }
     }
 
     pub fn execute(&mut self) -> Result<Box<[WorkdayDto]>, Box<dyn std::error::Error>> {

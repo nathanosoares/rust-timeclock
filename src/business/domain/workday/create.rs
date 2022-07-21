@@ -1,4 +1,4 @@
-use std::sync::{Mutex, Arc};
+use std::sync::{Arc, Mutex};
 
 use chrono::{TimeZone, Utc};
 
@@ -7,13 +7,13 @@ use super::entity::Workday;
 use super::repository::WorkdayRepository;
 use super::session::Session;
 
-pub struct CreateUseCase<'a> {
-    repository: Arc<&'a Mutex<WorkdayRepository>>,
+pub struct CreateUseCase {
+    repository: Arc<Mutex<WorkdayRepository>>,
 }
 
-impl<'a> CreateUseCase<'a> {
-    pub fn new(repository: &'a Mutex<WorkdayRepository>) -> Self {
-        Self { repository: Arc::new(repository) }
+impl CreateUseCase {
+    pub fn new(repository: Arc<Mutex<WorkdayRepository>>) -> Self {
+        Self { repository }
     }
 
     pub fn execute(&mut self, dto: CreateDto) -> Result<WorkdayDto, Box<dyn std::error::Error>> {
@@ -24,7 +24,7 @@ impl<'a> CreateUseCase<'a> {
         ))?;
 
         let dto = WorkdayDto {
-            date: workday.date()
+            date: workday.date(),
         };
 
         let mut guard = self.repository.lock().unwrap();
