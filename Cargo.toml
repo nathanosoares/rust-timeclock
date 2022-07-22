@@ -1,11 +1,18 @@
 [package]
+edition = "2021"
 name = "clean-arch"
 version = "0.1.0"
-edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 anyhow = "1.0.58"
+axum = "0.5.13"
 chrono = "0.4.19"
 thiserror = "1.0.31"
+tokio = {version = "1.20.0", features = ["full"]}
+async-trait = "0.1.56"
+
+[[bin]]
+name = "timeclock"
+path = "src/main.rs"
